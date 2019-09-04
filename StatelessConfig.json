@@ -1,0 +1,76 @@
+{
+	"data": {
+        "directory": "data",
+		"filename": "ModelSet*",
+        "predictors": [
+            "longitudinal_velocity_ins",
+            "transverse_velocity_ins",
+            "vertical_velocity_ins",
+            "roll_rate",
+            "pitch_rate",
+            "yaw_rate",
+            "depth",
+            "roll",
+            "pitch",
+            "yaw",
+            "RPM_thruster",
+            "plane1_position",
+            "plane2_position",
+            "plane3_position",
+            "plane4_position",
+            "plane5_position",
+            "plane6_position"
+        ],
+        "responses": [
+            "ax",
+            "ay",
+            "az",
+            "ap",
+            "aq",
+            "ar"
+        ],
+        "train_portion": 0.7,
+        "validation_portion": 0.2,
+        "test_portion": 0.1,
+		"normalise": true
+	},
+	"training": {
+		"epochs": 100,
+		"batch_size": 32,
+		"log_dir": "logs"
+	},
+	"model": {
+		"loss": "mse",
+		"optimizer": "adam",
+		"lr": 0.001,
+		"save_dir": "saved_models",
+		"layers": [
+			{
+				"type": "input"
+			},
+			{
+				"type": "dense",
+				"neurons": 100,
+				"activation": "relu"
+			},
+			{
+				"type": "dense",
+				"neurons": 100,
+				"activation": "relu"
+			},
+			{
+				"type": "dense",
+				"neurons": 100,
+				"activation": "relu"
+			},
+			{
+				"type": "dropout",
+				"rate": 0.2
+			},
+			{
+				"type": "dense",
+				"activation": "linear"
+			}
+		]
+	}
+}

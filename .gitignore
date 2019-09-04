@@ -1,0 +1,8 @@
+.ipynb_checkpoints
+data/*
+images/*
+logs/*
+saved_models/*
+scripts
+venv
+
