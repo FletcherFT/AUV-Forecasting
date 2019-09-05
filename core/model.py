@@ -283,7 +283,7 @@ class DenseModel:
                 else:
                     self.model.add(Dropout(dropout_rate))
         optimizer = Adam(lr=configs['model']['lr'])
-        self.model.compile(loss=least_trimmed_absolute_value, optimizer=optimizer)
+        self.model.compile(loss=least_trimmed_absolute_value(output_dim-1), optimizer=optimizer)
 
         print('[Model] Model Compiled')
         print(self.model.summary())

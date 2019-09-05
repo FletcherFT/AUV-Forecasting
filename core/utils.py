@@ -2,12 +2,13 @@ import datetime as dt
 import tensorflow as tf
 
 
-def least_trimmed_absolute_value(y_true, y_pred):
-    h = 5
-    Err = tf.sort(tf.abs(y_pred-y_true),
-           axis=1,
-           direction='ASCENDING')
-    return tf.reduce_sum(Err[:, 0:h], axis=1)
+def least_trimmed_absolute_value(h):
+    def inner_loop(y_true, y_pred):
+        Err = tf.sort(tf.abs(y_pred-y_true),
+               axis=1,
+               direction='ASCENDING')
+        return tf.reduce_sum(Err[:, 0:h], axis=1)
+    return inner_loop
 
 
 class Timer:
