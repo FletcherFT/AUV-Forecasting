@@ -1,17 +1,21 @@
 import os
+import sys
 import json
 import pandas as pd
-from tkinter import Tk
-from tkinter.filedialog import askopenfilename
+import glob
+import difflib
 from core.dataloader import StatelessDataLoader
 from core.model import DenseModel
 
-# force tensorflow to use CPU
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
-
-Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-modelfilename = askopenfilename(initialdir="saved_models", title="Select Model File (h5)", filetypes=[("HDF files", "*.h5")])
+print("Available Targets:")
+dirlist = glob.glob("saved_models/*.h5")
+separator = "\n"
+print(separator.join(dirlist))
+enteredname = input("Enter name or part of name from above:")
+bestchoices = difflib.get_close_matches(enteredname,dirlist)
+assert len(bestchoices)>0
+modelfilename = bestchoices[0]
+print("File: '{}' Selected.".format(modelfilename))
 logfilename = os.path.splitext(modelfilename)[0] + ".log"
 configfilename = os.path.splitext(modelfilename)[0] + ".json"
 

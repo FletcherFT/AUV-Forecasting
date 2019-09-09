@@ -306,7 +306,7 @@ class DenseModel:
         callbacks = [
             ModelCheckpoint(filepath=model_fname, monitor='loss', save_best_only=True),
             TensorBoard(log_dir=configs['training']['log_dir'],
-                        histogram_freq=5,
+                        histogram_freq=10,
                         batch_size=configs['training']['batch_size'],
                         write_graph=True,
                         write_grads=False,
@@ -319,20 +319,15 @@ class DenseModel:
             ReduceLROnPlateau(monitor='loss',
                               factor=0.5,
                               patience=5,
-                              min_lr=1e-6,
+                              min_lr=1e-8,
                               verbose=1,
                               cooldown=0),
-            # CyclicLR(base_lr=configs['model']['lr'],
-            #          max_lr=0.1,
-            #          step_size=8 * (data_obj.train_samples - configs['data']['sequence_length']) / configs['training'][
-            #              'batch_size'],
-            #          scale_fn=None,
-            #          mode='triangular2'),
             TerminateOnNaN(),
             CSVLogger(statistics_fname, separator=',', append=True),
             EarlyStopping(monitor='loss',
                           patience=10,
-                          verbose=1
+                          verbose=1,
+                          min_delta=1e-6
                           )
         ]
         try:
@@ -364,7 +359,7 @@ class DenseModel:
         callbacks = [
             ModelCheckpoint(filepath=model_fname, monitor='loss', save_best_only=True),
             TensorBoard(log_dir=configs['training']['log_dir'],
-                        histogram_freq=5,
+                        histogram_freq=10,
                         batch_size=configs['training']['batch_size'],
                         write_graph=True,
                         write_grads=False,
@@ -377,20 +372,15 @@ class DenseModel:
             ReduceLROnPlateau(monitor='loss',
                               factor=0.5,
                               patience=5,
-                              min_lr=1e-6,
+                              min_lr=1e-8,
                               verbose=1,
                               cooldown=0),
-            # CyclicLR(base_lr=configs['model']['lr'],
-            #          max_lr=0.1,
-            #          step_size=8 * (data_obj.train_samples - configs['data']['sequence_length']) / configs['training'][
-            #              'batch_size'],
-            #          scale_fn=None,
-            #          mode='triangular2'),
             TerminateOnNaN(),
             CSVLogger(statistics_fname, separator=',', append=True),
             EarlyStopping(monitor='loss',
                           patience=10,
-                          verbose=1
+                          verbose=1,
+                          min_delta=1e-6
                           )
         ]
         try:
