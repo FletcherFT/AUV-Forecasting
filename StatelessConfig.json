@@ -35,8 +35,8 @@
 		"normalise": true
 	},
 	"training": {
-		"epochs": 100,
-		"batch_size": 32,
+		"epochs": 1000,
+		"batch_size": 8,
 		"log_dir": "logs"
 	},
 	"model": {
