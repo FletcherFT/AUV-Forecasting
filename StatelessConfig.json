@@ -35,9 +35,10 @@
 		"normalise": true
 	},
 	"training": {
-		"epochs": 100,
-		"batch_size": 32,
-		"log_dir": "logs"
+		"epochs": 1,
+		"batch_size": 512,
+		"log_dir": "logs",
+		"h": 5
 	},
 	"model": {
 		"loss": "mse",
@@ -45,9 +46,6 @@
 		"lr": 0.001,
 		"save_dir": "saved_models",
 		"layers": [
-			{
-				"type": "input"
-			},
 			{
 				"type": "dense",
 				"neurons": 100,

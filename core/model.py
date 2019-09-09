@@ -249,9 +249,9 @@ class DenseModel:
     def __init__(self):
         self.model = Sequential()
 
-    def load_model(self, filepath):
+    def load_model(self, filepath, custom_objects=None):
         print('[Model] Loading model from file %s' % filepath)
-        self.model = load_model(filepath)
+        self.model = load_model(filepath, custom_objects=custom_objects)
 
     def build_model(self, configs):
         timer = Timer()
@@ -306,7 +306,7 @@ class DenseModel:
         callbacks = [
             ModelCheckpoint(filepath=model_fname, monitor='loss', save_best_only=True),
             TensorBoard(log_dir=configs['training']['log_dir'],
-                        histogram_freq=5,
+                        histogram_freq=10,
                         batch_size=configs['training']['batch_size'],
                         write_graph=True,
                         write_grads=False,
@@ -322,12 +322,6 @@ class DenseModel:
                               min_lr=1e-6,
                               verbose=1,
                               cooldown=0),
-            # CyclicLR(base_lr=configs['model']['lr'],
-            #          max_lr=0.1,
-            #          step_size=8 * (data_obj.train_samples - configs['data']['sequence_length']) / configs['training'][
-            #              'batch_size'],
-            #          scale_fn=None,
-            #          mode='triangular2'),
             TerminateOnNaN(),
             CSVLogger(statistics_fname, separator=',', append=True),
             EarlyStopping(monitor='loss',
@@ -380,17 +374,12 @@ class DenseModel:
                               min_lr=1e-6,
                               verbose=1,
                               cooldown=0),
-            # CyclicLR(base_lr=configs['model']['lr'],
-            #          max_lr=0.1,
-            #          step_size=8 * (data_obj.train_samples - configs['data']['sequence_length']) / configs['training'][
-            #              'batch_size'],
-            #          scale_fn=None,
-            #          mode='triangular2'),
             TerminateOnNaN(),
             CSVLogger(statistics_fname, separator=',', append=True),
             EarlyStopping(monitor='loss',
                           patience=10,
-                          verbose=1
+                          verbose=1,
+                          min_delta=1e-8,
                           )
         ]
         try:
@@ -403,9 +392,6 @@ class DenseModel:
                            steps_per_epoch=None,
                            validation_steps=None,
                            callbacks=callbacks,
-                           max_queue_size=100,
-                           workers=5,
-                           use_multiprocessing=False,
                            initial_epoch=epoch_start
                            )
         except KeyboardInterrupt:

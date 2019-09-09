@@ -5,6 +5,7 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from core.dataloader import StatelessDataLoader
 from core.model import DenseModel
+from core.utils import least_trimmed_absolute_value
 
 # force tensorflow to use CPU
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
@@ -24,6 +25,6 @@ data = StatelessDataLoader()
 data.create_in_memory(configs)
 
 model = DenseModel()
-model.load_model(modelfilename)
+model.load_model(modelfilename, custom_objects={'inner_loop': least_trimmed_absolute_value(configs['training']['h'])})
 
 model.continue_training(epoch_start, modelfilename, logfilename, data, configs)
