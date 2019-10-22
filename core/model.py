@@ -348,6 +348,16 @@ class DenseModel:
         print('[Model] Training Completed. Model saved as %s' % model_fname)
         timer.stop()
 
+    def next_step_prediction(self, test):
+        X = test[0]
+        y = test[1]
+        yhat = self.model.predict(X, batch_size=1, verbose=1)
+        return y, yhat
+
+    def loss_evaluation(self, test):
+        loss = self.model.evaluate(test[0], test[1], batch_size=1, verbose=1)
+        return loss
+
     def continue_training(self, epoch_start, model_fname, statistics_fname, data_obj, configs):
         timer = Timer()
         timer.start()
